@@ -1,0 +1,16 @@
+## LL parsers cannot be left-recursive aka LL parseres need right-recursion
+## When we enter into a  set of brackets ()  {( = l,  ) = r} we 'reset' the presidence tracking and return to the top (A)
+##		This happens at the bottom of the tree to avoid overlap
+## Had to refactor some of the rules so that LL(1) will be able to have disjoint predict sets
+
+S -> A $
+A -> SEQ B
+B -> pipe A
+	| lambda
+SEQ -> K  SEQB
+SEQB -> SEQ
+	| lambda
+K -> letter E
+	| l A r E
+E -> star
+	| lambda

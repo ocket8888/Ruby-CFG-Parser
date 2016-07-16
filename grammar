@@ -1,0 +1,75 @@
+#!/usr/bin/env ruby
+
+# adds lib directory to Gem path
+$LOAD_PATH.unshift(File.expand_path("../lib", __FILE__))
+
+# shortcut notation to require gems
+%w{ grammar optparse regexTokenStream nfa dfa }.each { |gem| require gem }
+
+# object to parse command line options
+options = {}
+OptionParser.new do |opts|
+	opts.banner = "Usage: grammar [OPTIONS] [FILE]"
+
+	opts.on("-o NAME", "--output=NAME", "output Graph to file") do |file|
+		options[:output] = file
+	end
+
+	opts.on("-t TYPE", "--type=TYPE", "type to compile to graph to. Default is png") do |type|
+		options[:type] = type.to_sym
+	end
+
+	opts.on("-s", "--simplify", "simplify regular expression parse tree") do |opt|
+		options[:simplify] = opt
+	end
+
+	opts.on("-r", "--regex", "accept a regular expression in a file in place of a token file") do |opt|
+		options[:regex] = opt
+	end
+
+	opts.on_tail("-h", "--help", "Show this message") do
+		puts opts
+		exit
+	end
+end.parse!
+
+grammar = Grammar.new ARGV.first
+puts grammar.to_s
+
+puts "\nItem sets: "
+grammar.get_item_sets.each_with_index do |item_set, i|
+  puts "Item set #{i}:"
+  item_set.each do |lhs, rhs_array|
+    rhs_array.each do |rhs|
+      puts "\t#{lhs} -> #{rhs.join(" ")}"
+    end
+  end
+end
+
+
+if options[:regex]
+  tokens = RegexTokenStream.new "#{ARGV[1]}"
+else
+  tokens = TokenStream.new "#{ARGV[1]}"
+end
+
+parse_tree = grammar.makeTree tokens
+
+if options[:simplify]
+    parse_tree.simplify!
+    
+    nfa = Nfa.new(parse_tree)
+
+    puts nfa
+
+    dfa = Dfa.new(nfa)
+
+    puts dfa
+end
+
+options[:output] ||= "parse_tree.png"
+
+type = File.extname(options[:output]).delete(".")
+type.empty? ? :png : type.to_sym
+
+parse_tree.to_graphviz options[:output], :type => type

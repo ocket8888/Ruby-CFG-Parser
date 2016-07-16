@@ -1,0 +1,5 @@
+Start	-> E $
+E	-> E plus T
+	| T
+T	-> T times num
+	| num

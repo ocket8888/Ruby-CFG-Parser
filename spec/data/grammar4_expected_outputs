@@ -1,0 +1,11 @@
+grammar4_expected_outputs
+
+derives to lambda = none
+
+First(S) = a, b ,c ,d
+First(B) =b, c, d
+First(C) = c, d
+
+Follow(S) = e, $
+Follow(B) = e, $
+Follow(C) = e, $

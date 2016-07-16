@@ -1,0 +1,36 @@
+grammar 2 expected outputs
+
+DerivesToLambda = EXPRTAIL, STMTS 
+
+First(PROG)= f, i. p, $
+First(DCLS)= f, i, p, $
+First(DCL)= f, i
+First(STMTS)= i, p, $
+First(STMT)= i, p
+First(EXPRTAIL)= p, m, $
+First(VAL)= i, n
+
+Follow(PROG)= $
+Follow(DCLS)=i, p, $
+Follow(DCL)= f, i, p, $
+Follow(STMTS)= $
+Follow(STMT)= i, p ,$
+Follow(EXPRTAIL)= i, p ,$
+Follow(VAL)= i, p, $
+
+
+
+
+PROG -> DCLS STMTS $
+DCLS -> DCL DCLS
+	| lambda
+DCL -> float id
+	| int id
+STMTS -> STMT STMTS
+	| lambda
+STMT -> id assign VAL EXPRTAIL
+	| print id
+EXPRTAIL -> plus VAL EXPRTAIL
+	| minus VAL EXPRTAIL
+	| lambda
+VAL -> id | num

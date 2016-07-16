@@ -1,0 +1,16 @@
+grammar3_expected_outputs
+
+
+Derives to Lambda = C, A, B, Q
+
+First(S)= a, b, q, c, $
+First(C)= c
+First(A)= a, b, q
+First(B)= b
+First(Q)= q
+
+Follow(S)= 
+Follow(C)= d, $
+Follow(A)= c, $
+Follow(B)= q, c, d, $
+Follow(Q)= c, $

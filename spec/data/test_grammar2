@@ -1,0 +1,13 @@
+PROG -> DCLS STMTS $
+DCLS -> DCL DCLS
+	| lambda
+DCL -> float id
+	| int id
+STMTS -> STMT STMTS
+	| lambda
+STMT -> id assign VAL EXPRTAIL
+	| print id
+EXPRTAIL -> plus VAL EXPRTAIL
+	| minus VAL EXPRTAIL
+	| lambda
+VAL -> id | num

@@ -1,0 +1,16 @@
+RE -> ALT $
+ALT -> SEQ ALTLIST
+ALTLIST -> pipe SEQ ALTLIST
+ALTLIST -> lambda
+SEQ -> ATOM SEQLIST
+SEQ -> lambda
+SEQLIST -> ATOM SEQLIST
+SEQLIST -> lambda
+ATOM -> NUCLEUS ATOMMOD
+ATOMMOD -> kleene
+ATOMMOD -> plus
+ATOMMOD -> lambda
+NUCLEUS -> open ALT close
+NUCLEUS -> char CHARRNG
+CHARRNG -> dash char
+CHARRNG -> lambda
